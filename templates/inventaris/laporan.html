@@ -1,0 +1,15 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h4>{{ judul }}</h4>
+<div class="no-print"><a class="btn btn-outline-success" href="?{{ request.GET.urlencode }}{% if request.GET %}&{% endif %}export=csv">Unduh CSV</a> <button class="btn btn-outline-secondary" onclick="print()">Cetak</button></div></div>
+<p class="text-muted small">Dicetak: {{ today|date:"d M Y" }} oleh {{ user.get_full_name|default:user.username }}</p>
+<form class="row g-2 mb-3 no-print">
+{% if jenis == 'barang' or jenis == 'stok' %}
+<div class="col-md-3"><select name="kondisi" class="form-select"><option value="">Semua status</option>{% for v,l in KONDISI %}<option value="{{ v }}" {% if v == kondisi %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><select name="jenis" class="form-select"><option value="">Semua jenis</option>{% for v,l in JENIS %}<option value="{{ v }}" {% if v == jns %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+{% elif jenis == 'peminjaman' %}
+<div class="col-md-3"><input type="date" name="dari" value="{{ dari }}" class="form-control"></div><div class="col-md-3"><input type="date" name="sampai" value="{{ sampai }}" class="form-control"></div>
+{% endif %}
+{% if jenis != 'belum-kembali' %}<div class="col-md-2"><button class="btn btn-outline-primary w-100">Filter</button></div>{% endif %}</form>
+<table class="table table-sm table-striped bg-white"><thead><tr>{% for h in head %}<th>{{ h }}</th>{% endfor %}</tr></thead><tbody>
+{% for r in rows %}<tr>{% for c in r %}<td>{{ c }}</td>{% endfor %}</tr>{% empty %}<tr><td colspan="{{ head|length }}" class="text-center text-muted">Tidak ada data.</td></tr>{% endfor %}</tbody></table>
+<p class="small text-muted">Total baris: {{ rows|length }}</p>{% endblock %}

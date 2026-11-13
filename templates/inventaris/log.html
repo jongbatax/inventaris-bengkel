@@ -1,0 +1,12 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<h4>Log Aktivitas</h4>
+<form class="row g-2 mb-3"><div class="col-md-3"><select name="objek" class="form-select"><option value="">Semua objek</option>{% for o in OBJEK %}<option {% if o == objek %}selected{% endif %}>{{ o }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><select name="aksi" class="form-select"><option value="">Semua aksi</option>{% for v,l in AKSI %}<option value="{{ v }}" {% if v == aksi %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><select name="user" class="form-select"><option value="">Semua pengguna</option>{% for u in users %}<option value="{{ u.pk }}" {% if u.pk|stringformat:"s" == uid %}selected{% endif %}>{{ u.get_full_name|default:u.username }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><button class="btn btn-outline-secondary w-100">Filter</button></div></form>
+<table class="table table-sm table-striped bg-white align-middle"><thead><tr><th>Waktu</th><th>Pengguna</th><th>Aksi</th><th>Objek</th><th>Lab</th><th>Detail</th></tr></thead><tbody>
+{% for l in items %}<tr><td class="text-nowrap">{{ l.waktu|date:"d M Y H:i" }}</td><td>{% if l.user %}{{ l.user.get_full_name|default:l.user.username }}{% else %}-{% endif %}</td>
+<td><span class="badge {% if l.aksi == 'hapus' %}bg-danger{% elif l.aksi == 'ubah' %}bg-warning text-dark{% else %}bg-success{% endif %}">{{ l.get_aksi_display }}</span></td>
+<td>{{ l.objek }}: {{ l.objek_nama }}</td><td>{{ l.laboratorium|default:"-" }}</td><td class="small">{{ l.detail|default:"-" }}</td></tr>
+{% empty %}<tr><td colspan="6" class="text-center text-muted">Belum ada aktivitas.</td></tr>{% endfor %}</tbody></table>
+<p class="small text-muted">Menampilkan maksimal 300 aktivitas terbaru sesuai cakupan akses Anda.</p>{% endblock %}

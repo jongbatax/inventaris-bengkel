@@ -1,0 +1,8 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h4>Peminjaman</h4>{% if user.profile.is_laboran %}<a class="btn btn-primary" href="{% url 'peminjaman_create' %}">+ Peminjaman Baru</a>{% endif %}</div>
+<div class="btn-group mb-3"><a class="btn btn-outline-secondary {% if not status %}active{% endif %}" href="?">Semua</a><a class="btn btn-outline-secondary {% if status == 'dipinjam' %}active{% endif %}" href="?status=dipinjam">Masih dipinjam</a><a class="btn btn-outline-secondary {% if status == 'selesai' %}active{% endif %}" href="?status=selesai">Selesai</a></div>
+<table class="table table-sm table-striped bg-white"><thead><tr><th>Kode</th><th>PTK</th><th>Lab</th><th>Tgl Pinjam</th><th>Harus Kembali</th><th>Status</th><th></th></tr></thead><tbody>
+{% for p in items %}<tr><td>{{ p.kode }}</td><td>{{ p.ptk }}</td><td>{{ p.laboratorium }}</td><td>{{ p.tanggal_pinjam|date:"d M Y" }}</td><td>{{ p.tanggal_harus_kembali|date:"d M Y" }}</td>
+<td>{% if p.terlambat %}<span class="badge bg-danger">Terlambat</span>{% elif p.status == 'dipinjam' %}<span class="badge bg-primary">Dipinjam</span>{% else %}<span class="badge bg-success">Selesai</span>{% endif %}</td>
+<td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{% url 'peminjaman_detail' p.pk %}">Detail</a></td></tr>
+{% empty %}<tr><td colspan="7" class="text-center text-muted">Tidak ada data.</td></tr>{% endfor %}</tbody></table>{% endblock %}

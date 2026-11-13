@@ -1,0 +1,14 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h4>{{ p.kode }}</h4>
+<div>{% if user.profile.is_laboran and p.status == 'dipinjam' %}<a class="btn btn-success" href="{% url 'pengembalian_form' p.pk %}">Catat Pengembalian</a>{% endif %} <a class="btn btn-link" href="{% url 'peminjaman_list' %}">← Kembali</a></div></div>
+<div class="card mb-3"><div class="card-body"><dl class="row mb-0">
+<dt class="col-sm-3">Peminjam</dt><dd class="col-sm-9">{{ p.ptk }} ({{ p.ptk.departemen }})</dd>
+<dt class="col-sm-3">Laboratorium</dt><dd class="col-sm-9">{{ p.laboratorium }}</dd>
+<dt class="col-sm-3">Tgl pinjam</dt><dd class="col-sm-9">{{ p.tanggal_pinjam|date:"d M Y" }}</dd>
+<dt class="col-sm-3">Harus kembali</dt><dd class="col-sm-9">{{ p.tanggal_harus_kembali|date:"d M Y" }} {% if p.terlambat %}<span class="badge bg-danger">Terlambat</span>{% endif %}</dd>
+<dt class="col-sm-3">Keperluan</dt><dd class="col-sm-9">{{ p.keperluan|default:"-" }}</dd>
+<dt class="col-sm-3">Dicatat oleh</dt><dd class="col-sm-9">{{ p.dibuat_oleh.get_full_name|default:p.dibuat_oleh.username }}</dd></dl></div></div>
+<table class="table table-sm bg-white"><thead><tr><th>Barang</th><th>Jenis</th><th>Jumlah</th><th>Sudah kembali</th><th>Riwayat kembali</th></tr></thead><tbody>
+{% for d in details %}<tr><td>{{ d.barang.nama }}</td><td>{{ d.barang.get_jenis_display }}</td><td>{{ d.jumlah }} {{ d.barang.satuan }}</td>
+<td>{% if d.barang.is_aset %}{{ d.jumlah_kembali }} / {{ d.jumlah }}{% else %}<span class="text-muted">habis pakai</span>{% endif %}</td>
+<td>{% for r in d.pengembalian.all %}<div class="small">{{ r.tanggal|date:"d M Y" }}: {{ r.jumlah }} ({{ r.get_kondisi_display }}) · diterima {{ r.diterima_oleh.get_full_name|default:r.diterima_oleh.username }}{% if r.catatan %} – {{ r.catatan }}{% endif %}</div>{% empty %}-{% endfor %}</td></tr>{% endfor %}</tbody></table>{% endblock %}

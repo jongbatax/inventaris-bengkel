@@ -1,0 +1,14 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<h4>Peminjaman Baru <small class="text-muted">– {{ lab }}</small></h4>
+<form method="post" class="card card-body">{% csrf_token %}
+{{ form.non_field_errors }}
+<div class="row g-3">{% for f in form %}<div class="col-md-6"><label class="form-label">{{ f.label }}</label>{{ f }}{% for e in f.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>{% endfor %}</div>
+<hr><h6>Alat / Bahan</h6>{{ fs.management_form }}{% for e in fs.non_form_errors %}<div class="alert alert-danger py-1">{{ e }}</div>{% endfor %}
+{% for f in fs %}<div class="row g-2 mb-2"><div class="col-md-8">{{ f.barang }}</div><div class="col-md-2">{{ f.jumlah }}</div>
+<div class="col-md-2">{% for e in f.non_field_errors %}<span class="text-danger small">{{ e }}</span>{% endfor %}</div>
+{% for h in f.hidden_fields %}{{ h }}{% endfor %}</div>{% endfor %}
+<div class="form-text mb-3">Kosongkan baris yang tidak dipakai. Alat (aset) akan ditandai sedang dipinjam; bahan habis pakai langsung mengurangi stok.</div>
+<div><button class="btn btn-primary">Simpan</button> <a class="btn btn-link" href="{% url 'peminjaman_list' %}">Batal</a></div></form>
+<script>document.querySelectorAll("form input:not([type=hidden]),form select").forEach(e=>e.classList.add(e.tagName=="SELECT"?"form-select":"form-control"));
+document.querySelectorAll("[name$=-jumlah]").forEach(e=>{if(!e.value)e.value=1;e.min=1});</script>
+{% endblock %}

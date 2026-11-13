@@ -1,0 +1,10 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<h4>Pengembalian</h4>
+<h6 class="mt-3">Akan jatuh tempo ≤ {{ soon_days }} hari</h6>
+{% include "inventaris/_belum.html" with rows=soon %}
+<h6 class="mt-4">Semua alat belum dikembalikan</h6>
+{% include "inventaris/_belum.html" with rows=belum %}
+<h6 class="mt-4">Riwayat pengembalian terbaru</h6>
+<table class="table table-sm bg-white"><thead><tr><th>Tanggal</th><th>PTK</th><th>Barang</th><th>Jumlah</th><th>Kondisi</th></tr></thead><tbody>
+{% for r in riwayat %}<tr><td>{{ r.tanggal|date:"d M Y" }}</td><td>{{ r.detail.peminjaman.ptk }}</td><td>{{ r.detail.barang.nama }}</td><td>{{ r.jumlah }}</td><td>{{ r.get_kondisi_display }}</td></tr>
+{% empty %}<tr><td colspan="5" class="text-muted text-center">Belum ada.</td></tr>{% endfor %}</tbody></table>{% endblock %}

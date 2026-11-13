@@ -1,0 +1,13 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h4>Data Barang</h4><a class="btn btn-primary" href="{% url 'barang_create' %}">+ Tambah</a></div>
+<form class="row g-2 mb-3"><div class="col-md-4"><input name="q" value="{{ q }}" class="form-control" placeholder="Cari kode / nama"></div>
+<div class="col-md-3"><select name="jenis" class="form-select"><option value="">Semua jenis</option>{% for v,l in JENIS %}<option value="{{ v }}" {% if v == jenis %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><select name="kondisi" class="form-select"><option value="">Semua status</option>{% for v,l in KONDISI %}<option value="{{ v }}" {% if v == kondisi %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><button class="btn btn-outline-secondary w-100">Filter</button></div></form>
+<div class="table-responsive"><table class="table table-sm table-striped bg-white align-middle"><thead><tr><th>Kode</th><th>Nama</th><th>Kategori</th><th>Jenis</th><th>Status</th><th>Stok</th><th>Lab</th><th>Terakhir diubah</th><th></th></tr></thead><tbody>
+{% for b in items %}<tr><td>{{ b.kode }}</td><td>{{ b.nama }}</td><td>{{ b.kategori }}</td><td>{{ b.get_jenis_display }}</td>
+<td><span class="badge {% if b.kondisi == 'baik' %}bg-success{% elif b.kondisi == 'rusak_ringan' %}bg-warning text-dark{% else %}bg-danger{% endif %}">{{ b.get_kondisi_display }}</span></td>
+<td>{{ b.stok }} {{ b.satuan }}{% if b.is_aset %} <small class="text-muted">(dipinjam {{ b.dipinjam }})</small>{% endif %}</td><td>{{ b.laboratorium }}</td>
+<td class="small">{% if b.diubah_oleh %}{{ b.diubah_oleh.get_full_name|default:b.diubah_oleh.username }}{% else %}-{% endif %}<br><span class="text-muted">{{ b.diubah_pada|date:"d M Y H:i" }}</span></td>
+<td class="text-end text-nowrap"><a class="btn btn-sm btn-outline-primary" href="{% url 'barang_edit' b.pk %}">Ubah</a> <a class="btn btn-sm btn-outline-danger" href="{% url 'barang_delete' b.pk %}">Hapus</a></td></tr>
+{% empty %}<tr><td colspan="9" class="text-center text-muted">Tidak ada data.</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

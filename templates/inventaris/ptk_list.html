@@ -1,0 +1,7 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h4>Data PTK (Peminjam)</h4>{% if user.profile.is_laboran %}<a class="btn btn-primary" href="{% url 'ptk_create' %}">+ Tambah</a>{% endif %}</div>
+<form class="mb-3"><input name="q" value="{{ q }}" class="form-control" style="max-width:360px" placeholder="Cari nama / NIP / departemen"></form>
+<table class="table table-sm table-striped bg-white"><thead><tr><th>Nama</th><th>NIP/NUPTK</th><th>Departemen</th><th>Telepon</th><th></th></tr></thead><tbody>
+{% for p in items %}<tr><td><a href="{% url 'riwayat' %}?ptk={{ p.pk }}">{{ p.nama }}</a></td><td>{{ p.nip }}</td><td>{{ p.departemen }}</td><td>{{ p.telepon }}</td>
+<td class="text-end">{% if user.profile.is_laboran %}<a class="btn btn-sm btn-outline-primary" href="{% url 'ptk_edit' p.pk %}">Ubah</a> <a class="btn btn-sm btn-outline-danger" href="{% url 'ptk_delete' p.pk %}">Hapus</a>{% endif %}</td></tr>
+{% empty %}<tr><td colspan="5" class="text-center text-muted">Tidak ada data.</td></tr>{% endfor %}</tbody></table>{% endblock %}

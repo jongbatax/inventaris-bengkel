@@ -1,0 +1,9 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<h4>Riwayat Peminjaman</h4>
+<form class="row g-2 mb-3"><div class="col-md-4"><select name="ptk" class="form-select"><option value="">Semua PTK</option>{% for p in ptk_list %}<option value="{{ p.pk }}" {% if p.pk|stringformat:"s" == ptk_id %}selected{% endif %}>{{ p.nama }}</option>{% endfor %}</select></div>
+<div class="col-md-4"><select name="barang" class="form-select"><option value="">Semua alat/bahan</option>{% for b in barang_list %}<option value="{{ b.pk }}" {% if b.pk|stringformat:"s" == barang_id %}selected{% endif %}>{{ b.nama }} ({{ b.laboratorium }})</option>{% endfor %}</select></div>
+<div class="col-md-2"><button class="btn btn-outline-secondary w-100">Tampilkan</button></div></form>
+<table class="table table-sm table-striped bg-white"><thead><tr><th>Tgl Pinjam</th><th>Kode</th><th>PTK</th><th>Barang</th><th>Jumlah</th><th>Harus kembali</th><th>Kembali</th></tr></thead><tbody>
+{% for d in items %}<tr><td>{{ d.peminjaman.tanggal_pinjam|date:"d M Y" }}</td><td><a href="{% url 'peminjaman_detail' d.peminjaman.pk %}">{{ d.peminjaman.kode }}</a></td><td>{{ d.peminjaman.ptk }}</td><td>{{ d.barang.nama }}</td><td>{{ d.jumlah }}</td><td>{{ d.peminjaman.tanggal_harus_kembali|date:"d M Y" }}</td>
+<td>{% if not d.barang.is_aset %}<span class="text-muted">habis pakai</span>{% else %}{{ d.jumlah_kembali }}/{{ d.jumlah }}{% endif %}</td></tr>
+{% empty %}<tr><td colspan="7" class="text-center text-muted">Tidak ada data.</td></tr>{% endfor %}</tbody></table>{% endblock %}

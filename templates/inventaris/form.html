@@ -1,0 +1,10 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<h4>{{ title }}</h4>
+<form method="post" class="card card-body" style="max-width:640px">{% csrf_token %}
+{% for f in form %}<div class="mb-3"><label class="form-label">{{ f.label }}</label>
+{{ f }}{% if f.help_text %}<div class="form-text">{{ f.help_text }}</div>{% endif %}
+{% for e in f.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>{% endfor %}
+{{ form.non_field_errors }}
+<div><button class="btn btn-primary">Simpan</button> <a href="{% url back %}" class="btn btn-link">Batal</a></div></form>
+<script>document.querySelectorAll("form input:not([type=checkbox]):not([type=hidden]),form select,form textarea").forEach(e=>e.classList.add(e.tagName=="SELECT"?"form-select":"form-control"))</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<h4 class="mb-3">Dashboard</h4>
+<div class="row g-3 mb-4">
+<div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Alat (aset)</div><div class="fs-3">{{ total_aset }}</div></div></div></div>
+<div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Barang habis pakai</div><div class="fs-3">{{ total_habis }}</div></div></div></div>
+<div class="col-6 col-md-3"><div class="card border-primary"><div class="card-body"><div class="text-muted small">Peminjaman aktif</div><div class="fs-3">{{ aktif }}</div></div></div></div>
+<div class="col-6 col-md-3"><div class="card border-danger"><div class="card-body"><div class="text-muted small">Terlambat</div><div class="fs-3 text-danger">{{ terlambat }}</div></div></div></div>
+</div>
+<div class="row g-3">
+<div class="col-md-4"><div class="card h-100"><div class="card-header">Status barang</div><ul class="list-group list-group-flush">
+<li class="list-group-item d-flex justify-content-between">Baik <span class="badge bg-success">{{ baik }}</span></li>
+<li class="list-group-item d-flex justify-content-between">Rusak ringan <span class="badge bg-warning text-dark">{{ rusak_ringan }}</span></li>
+<li class="list-group-item d-flex justify-content-between">Rusak berat <span class="badge bg-danger">{{ rusak_berat }}</span></li></ul></div></div>
+<div class="col-md-4"><div class="card h-100"><div class="card-header">Peminjaman per bulan</div><div class="card-body">
+{% for r in per_bulan %}<div class="small">{{ r.label }} ({{ r.n }})</div><div class="progress mb-2"><div class="progress-bar" style="width:{{ r.pct }}%"></div></div>{% empty %}<span class="text-muted">Belum ada data.</span>{% endfor %}</div></div></div>
+<div class="col-md-4"><div class="card h-100"><div class="card-header">Paling sering dipinjam</div><ul class="list-group list-group-flush">
+{% for t in top_barang %}<li class="list-group-item d-flex justify-content-between">{{ t.barang__nama }} <span class="badge bg-secondary">{{ t.total }}</span></li>{% empty %}<li class="list-group-item text-muted">Belum ada data.</li>{% endfor %}</ul></div></div>
+<div class="col-md-6"><div class="card h-100"><div class="card-header">Segera / sudah lewat jatuh tempo</div><ul class="list-group list-group-flush">
+{% for d in jatuh_tempo %}<li class="list-group-item"><a href="{% url 'peminjaman_detail' d.peminjaman.pk %}">{{ d.peminjaman.ptk }}</a> – {{ d.barang.nama }} ×{{ d.sisa }}
+<span class="float-end badge {% if d.peminjaman.tanggal_harus_kembali < today %}bg-danger{% else %}bg-warning text-dark{% endif %}">{{ d.peminjaman.tanggal_harus_kembali|date:"d M Y" }}</span></li>
+{% empty %}<li class="list-group-item text-muted">Tidak ada.</li>{% endfor %}</ul></div></div>
+<div class="col-md-6"><div class="card h-100"><div class="card-header">Stok menipis (≤ 5)</div><ul class="list-group list-group-flush">
+{% for b in stok_menipis %}<li class="list-group-item d-flex justify-content-between">{{ b.nama }} <small class="text-muted">{{ b.laboratorium }}</small><span class="badge bg-danger">{{ b.stok }} {{ b.satuan }}</span></li>{% empty %}<li class="list-group-item text-muted">Aman.</li>{% endfor %}</ul></div></div>
+</div>{% endblock %}

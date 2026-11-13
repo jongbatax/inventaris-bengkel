@@ -1,0 +1,10 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<h4>Pengembalian {{ p.kode }} <small class="text-muted">– {{ p.ptk }}</small></h4>
+<form method="post" class="card card-body">{% csrf_token %}
+<div class="mb-3" style="max-width:240px"><label class="form-label">Tanggal kembali</label><input type="date" name="tanggal" value="{{ today|date:'Y-m-d' }}" class="form-control"></div>
+<table class="table table-sm align-middle"><thead><tr><th>Alat</th><th>Belum kembali</th><th style="width:120px">Dikembalikan</th><th style="width:180px">Kondisi</th><th>Catatan</th></tr></thead><tbody>
+{% for d in rows %}<tr><td>{{ d.barang.nama }}</td><td>{{ d.sisa }}</td>
+<td><input type="number" min="0" max="{{ d.sisa }}" name="jml_{{ d.id }}" value="{{ d.sisa }}" class="form-control form-control-sm"></td>
+<td><select name="kondisi_{{ d.id }}" class="form-select form-select-sm">{% for v,l in KONDISI %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></td>
+<td><input name="catatan_{{ d.id }}" class="form-control form-control-sm"></td></tr>{% endfor %}</tbody></table>
+<div><button class="btn btn-success">Simpan Pengembalian</button> <a class="btn btn-link" href="{% url 'peminjaman_detail' p.pk %}">Batal</a></div></form>{% endblock %}

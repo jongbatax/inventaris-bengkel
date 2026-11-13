@@ -1,0 +1,5 @@
+<table class="table table-sm bg-white"><thead><tr><th>Kode</th><th>PTK</th><th>Alat</th><th>Belum kembali</th><th>Harus kembali</th><th></th></tr></thead><tbody>
+{% for d in rows %}<tr><td>{{ d.peminjaman.kode }}</td><td>{{ d.peminjaman.ptk }}</td><td>{{ d.barang.nama }}</td><td>{{ d.sisa }}</td>
+<td>{{ d.peminjaman.tanggal_harus_kembali|date:"d M Y" }} {% if d.peminjaman.tanggal_harus_kembali < today %}<span class="badge bg-danger">Terlambat</span>{% endif %}</td>
+<td class="text-end">{% if user.profile.is_laboran %}<a class="btn btn-sm btn-success" href="{% url 'pengembalian_form' d.peminjaman.pk %}">Kembalikan</a>{% else %}<a class="btn btn-sm btn-outline-primary" href="{% url 'peminjaman_detail' d.peminjaman.pk %}">Detail</a>{% endif %}</td></tr>
+{% empty %}<tr><td colspan="6" class="text-muted text-center">Tidak ada.</td></tr>{% endfor %}</tbody></table>

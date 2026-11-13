@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtualenv
+.venv/
+venv/
+env/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.log
+media/
+staticfiles/
+.env
+
+# Migrations (opsional: hapus 2 baris ini jika migrasi ingin ikut di-commit)
+inventaris/migrations/0*.py
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

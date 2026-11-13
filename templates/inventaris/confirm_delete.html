@@ -1,0 +1,4 @@
+{% extends "inventaris/base.html" %}{% block content %}
+<h4>Hapus data?</h4><p>{{ obj }}</p>
+<form method="post">{% csrf_token %}<button class="btn btn-danger">Ya, hapus</button> <a class="btn btn-link" href="{% url back %}">Batal</a></form>
+{% endblock %}
